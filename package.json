@@ -1,0 +1,22 @@
+{
+  "name": "ttp-fs",
+  "version": "1.0.0",
+  "description": "Stock portfolio fullstack app",
+  "main": "index.js",
+  "repository": "https://github.com/frvnkly/TTP-FS",
+  "author": "Frank Li",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "next": "^9.0.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "NODE_ENV=production node index.js"
+  }
+}
