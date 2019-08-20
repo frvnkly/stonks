@@ -140,6 +140,7 @@ export default () => {
       setLoading(false);
     }).catch(err => {
       if (err.response.status === 409) { dispatch({ type: 'emailInUse' }) };
+      if (err.response.status === 400) { alert('Invalid submission.') }
       setLoading(false);
     });
   };
