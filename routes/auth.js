@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const userSchema = require('../models/User');
 const User = mongoose.model('User', userSchema);
+const { hash, compare } = require('../utilities/passwordHasher');
 
 const routePrefix = '/auth';
 
@@ -12,7 +13,7 @@ const validateRegisterInput = ({name, email, password}) => {
 
   if (!name) return false;
   if (!emailRegex.test(email)) return false;
-  if (password.length < 8) return false;
+  if (password.length < passwordMinLength) return false;
   return true;
 };
 
@@ -34,7 +35,7 @@ module.exports = app => {
 
       // check if email already in use
       User.findOne({ email })
-        .exec((err, user) => {
+        .exec(async (err, user) => {
           if (err || user) {
             const errorCode = err ? 500 : 409;
             res
@@ -44,21 +45,22 @@ module.exports = app => {
             return;
           }
           
+          // hash password
+          const passwordHash = await hash(password);
+
           // save user credentials to database
           const newUser = new User({
             name,
             email,
-            password,
+            passwordHash,
           });
-          newUser.save()
-            .then(() => {
-              res
-                .status(201)
-                .send()
-                .end();
-              return;
-            })
-        })
+          await newUser.save();
+          res
+            .status(201)
+            .send()
+            .end();
+          return;
+        });
     } 
   );
 };
