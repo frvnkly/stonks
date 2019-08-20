@@ -1,6 +1,7 @@
+// https://github.com/mui-org/material-ui/tree/master/examples/nextjs
+
 import React from 'react';
 import App, { Container } from 'next/app';
-// https://github.com/mui-org/material-ui/tree/master/examples/nextjs
 
 import Head from 'next/head';
 import CssBaseline from '@material-ui/core/CssBaseline';
