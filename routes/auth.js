@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 const userSchema = require('../models/User');
 const User = mongoose.model('User', userSchema);
-const { hash, compare } = require('../utilities/passwordHasher');
+const { hash } = require('../utilities/passwordHasher');
 
 const routePrefix = '/auth';
 
@@ -61,6 +62,21 @@ module.exports = app => {
             .end();
           return;
         });
-    } 
+    }
+  );
+
+  app.post(
+    `${routePrefix}/signin`,
+    passport.authenticate('local'),
+    (req, res) => {
+      res.redirect('/');
+    }
+  );
+
+  app.get(
+    `${routePrefix}/current_user`,
+    (req, res) => {
+      res.send(req.user);
+    }
   );
 };

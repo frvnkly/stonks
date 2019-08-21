@@ -16,21 +16,12 @@ const useStyles = makeStyles({
 });
 
 const initialState = {
-  name: {
-    value: '',
-    label: 'Name',
-    type: 'text',
-    action: 'name',
-    error: null,
-    required: true
-  },
   email: {
     value: '',
     label: 'Email',
     type: 'email',
     action: 'email',
     error: null,
-    required: true
   },
   password: {
     value: '',
@@ -38,38 +29,17 @@ const initialState = {
     type: 'password',
     action: 'password',
     error: null,
-    required: true
-  },
-  reenterPassword: {
-    value: '',
-    label: 'Re-enter password',
-    type: 'password',
-    action: 'reenterPassword',
-    error: null,
-    required: true
-  },
+  }
 };
 
 // reducer handles form updates and validation
 const formStateReducer = (formState, action) => {
   switch (action.type) {
-    case 'name':
-      let nameError = null;
-      if (!action.payload) nameError = 'Name required.';
-      return {
-        ...formState,
-        name: {
-          ...formState.name,
-          value: action.payload,
-          error: nameError
-        }
-      };
     case 'email':
       let emailError = null;
       const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      if (!action.payload) emailError = 'Email required.'
-      else if (!emailRegex.test(action.payload))
-        emailError = 'Please enter a valid email address';
+      if (!emailRegex.test(action.payload))
+        emailError = 'Please enter a email address.';
       return {
         ...formState,
         email: {
@@ -78,38 +48,15 @@ const formStateReducer = (formState, action) => {
           error: emailError
         }
       };
-    case 'emailInUse':
-      return {
-        ...formState,
-        email: {
-          ...formState.email,
-          error: 'Email in use.'
-        }
-      };
     case 'password':
       let passwordError = null;
-      const minLength = 8;
-      if (!action.payload) passwordError = 'Password required.'
-      else if (action.payload.length < minLength)
-        passwordError = `Password must be a minimum of ${minLength} characters.`;
+      if (!action.payload) passwordError = 'Please enter a password.';
       return {
         ...formState,
         password: {
           ...formState.password,
           value: action.payload,
-          error: passwordError
-        }
-      };
-    case 'reenterPassword':
-      let reenterError = null;
-      if (action.payload !== formState.password.value)
-        reenterError = 'Password fields must match.';
-      return {
-        ...formState,
-        reenterPassword: {
-          ...formState.reenterPassword,
-          value: action.payload,
-          error: reenterError
+          error: passwordError,
         }
       };
     default:
@@ -123,27 +70,7 @@ export default () => {
   const [ formState, dispatch ] = useReducer(formStateReducer, initialState);
   const [ loading, setLoading ] = useState(false);
 
-  const signupFormHandler = e => {
-    e.preventDefault();
-
-    setLoading(true);
-    
-    const signupEndpoint = '/auth/register';
-    axios.post(
-      signupEndpoint,
-      {
-        name: formState.name.value,
-        email: formState.email.value,
-        password: formState.password.value
-      }
-    ).then(res => {
-      setLoading(false);
-    }).catch(err => {
-      if (err.response.status === 409) { dispatch({ type: 'emailInUse' }) };
-      if (err.response.status === 400) { alert('Invalid submission.') }
-      setLoading(false);
-    });
-  };
+  const signinFormHandler = () => {};
 
   const renderForm = () => {
     const fields = Object.keys(formState);
@@ -153,7 +80,6 @@ export default () => {
           <TextField
             fullWidth
             variant='outlined'
-            required={formState[field].required}
             type={formState[field].type}
             label={formState[field].label}
             value={formState[field].value}
@@ -172,13 +98,13 @@ export default () => {
   return (
     <Container maxWidth='lg'>
       <Typography
-        className={styleClasses.typography}
+        className={styleClasses.typography} 
         variant='h4'
       >
-        Sign Up
+        Sign In
       </Typography>
       <form
-        onSubmit={signupFormHandler}
+        onSubmit={signinFormHandler}
       >
         {renderForm()}
         <Grid container spacing={3} justify='center'>
@@ -187,9 +113,9 @@ export default () => {
               variant='contained'
               fullWidth
               disabled={loading}
-              onClick={signupFormHandler}
+              onClick={signinFormHandler}
             >
-              {loading ? <CircularProgress size={24} /> : 'Sign Up'}
+              {loading ? <CircularProgress size={24} /> : 'Sign In'}
             </Button>
           </Grid>
         </Grid>

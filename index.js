@@ -1,10 +1,22 @@
 const express = require('express');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 
 const next = require('./next');
-require('./mongoose');
+require('./services/mongoose');
+require('./services/passport');
 
 const app = express();
+
 app.use(express.json());
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    keys: ['st0nks']
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // authentication routes
 require('./routes/auth')(app);
