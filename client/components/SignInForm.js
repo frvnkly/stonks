@@ -36,29 +36,33 @@ const initialState = {
 const formStateReducer = (formState, action) => {
   switch (action.type) {
     case 'email':
-      let emailError = null;
-      const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      if (!emailRegex.test(action.payload))
-        emailError = 'Please enter a email address.';
       return {
         ...formState,
         email: {
           ...formState.email,
           value: action.payload,
-          error: emailError
         }
       };
     case 'password':
-      let passwordError = null;
-      if (!action.payload) passwordError = 'Please enter a password.';
       return {
         ...formState,
         password: {
           ...formState.password,
           value: action.payload,
-          error: passwordError,
         }
       };
+    case 'incorrectCredentials':
+      return {
+        ...formState,
+        email: {
+          ...formState.email,
+          error: 'Incorrect username or password.',
+        },
+        password: {
+          ...formState.password,
+          error: 'Incorrect username or password.',
+        }
+      }
     default:
       return formState;
   }
@@ -70,7 +74,40 @@ export default () => {
   const [ formState, dispatch ] = useReducer(formStateReducer, initialState);
   const [ loading, setLoading ] = useState(false);
 
-  const signinFormHandler = () => {};
+  let submitEnabled = true;
+  for (let f in formState) {
+    if (!formState[f].value) {
+      submitEnabled = false;
+      break;
+    }
+  }
+
+  const signinFormHandler = e => {
+    e.preventDefault();
+    if (!submitEnabled) return;
+
+    setLoading(true);
+
+    const signinEndpoint = '/auth/signin';
+    axios.post(
+      signinEndpoint,
+      {
+        email: formState.email.value,
+        password: formState.password.value
+      }
+    ).then(res => {
+      setLoading(false);
+      return;
+    }).catch(err => {
+      dispatch({ type: 'incorrectCredentials' })
+      setLoading(false);
+      return;
+    });
+  };
+
+  const enterKeySubmitHandler = e => {
+    if (e.key === 'Enter') signinFormHandler(e);
+  };
 
   const renderForm = () => {
     const fields = Object.keys(formState);
@@ -88,6 +125,7 @@ export default () => {
             onChange={e => {
               dispatch({ type: formState[field].action, payload: e.target.value })
             }}
+            onKeyDown={enterKeySubmitHandler}
           />
         </Grid>
       </Grid>
@@ -112,7 +150,7 @@ export default () => {
             <Button
               variant='contained'
               fullWidth
-              disabled={loading}
+              disabled={!submitEnabled || loading}
               onClick={signinFormHandler}
             >
               {loading ? <CircularProgress size={24} /> : 'Sign In'}

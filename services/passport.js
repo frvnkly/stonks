@@ -12,11 +12,10 @@ passport.use(new Strategy(
     passwordField: 'password',
   },
   (email, password, done) => {
-    User.find({ email })
+    User.findOne({ email })
       .exec(async (err, user) => {
         if (err) return done(err);
         if (!user) return done(null, false);
-        
         const match = await compare(password, user.passwordHash);
         if (!match) return done(null, false);
         return done(null, user);
