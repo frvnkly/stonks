@@ -141,9 +141,7 @@ export default () => {
       >
         Sign In
       </Typography>
-      <form
-        onSubmit={signinFormHandler}
-      >
+      <form>
         {renderForm()}
         <Grid container spacing={3} justify='center'>
           <Grid item xs={12} sm={4}>

@@ -123,8 +123,17 @@ export default () => {
   const [ formState, dispatch ] = useReducer(formStateReducer, initialState);
   const [ loading, setLoading ] = useState(false);
 
+  let submissionEnabled = true;
+  for (let f in formState) {
+    if (formState[f].error || (formState[f].required && !formState[f].value)) {
+      submissionEnabled = false;
+      break;
+    }
+  }
+
   const signupFormHandler = e => {
     e.preventDefault();
+    if (!submissionEnabled) return;
 
     setLoading(true);
     
@@ -145,6 +154,10 @@ export default () => {
     });
   };
 
+  const enterKeySubmitHandler = e => {
+    if (e.key === 'Enter') signupFormHandler(e);
+  };
+
   const renderForm = () => {
     const fields = Object.keys(formState);
     const formFields = fields.map(field => (
@@ -162,6 +175,7 @@ export default () => {
             onChange={e => {
               dispatch({ type: formState[field].action, payload: e.target.value })
             }}
+            onKeyDown={enterKeySubmitHandler}
           />
         </Grid>
       </Grid>
@@ -177,16 +191,14 @@ export default () => {
       >
         Sign Up
       </Typography>
-      <form
-        onSubmit={signupFormHandler}
-      >
+      <form>
         {renderForm()}
         <Grid container spacing={3} justify='center'>
           <Grid item xs={12} sm={4}>
             <Button
               variant='contained'
               fullWidth
-              disabled={loading}
+              disabled={loading || !submissionEnabled}
               onClick={signupFormHandler}
             >
               {loading ? <CircularProgress size={24} /> : 'Sign Up'}
