@@ -1,7 +1,12 @@
 import SignInForm from '../components/SignInForm';
 
+import Navbar from '../components/Navbar';
+
 export default () => {
   return (
-    <SignInForm />
+    <div>
+      <Navbar />
+      <SignInForm />
+    </div>
   );
 };
