@@ -12,7 +12,8 @@ passport.use(new Strategy(
     passwordField: 'password',
   },
   (email, password, done) => {
-    User.findOne({ email })
+    User
+      .findOne({ email })
       .exec(async (err, user) => {
         if (err) return done(err);
         if (!user) return done(null, false);
