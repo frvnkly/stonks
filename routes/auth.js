@@ -66,9 +66,17 @@ module.exports = app => {
   );
 
   app.post(
-    `${routePrefix}/signin`,
+    `${routePrefix}/login`,
     passport.authenticate('local'),
     (req, res) => {
+      res.redirect('/');
+    }
+  );
+
+  app.get(
+    `${routePrefix}/logout`,
+    (req, res) => {
+      req.logout();
       res.redirect('/');
     }
   );

@@ -28,8 +28,8 @@ export default () => {
         </IconButton>
       </>
     : <>
-        <Button color='inherit' className={styleClasses.navOption}>Sign In</Button>
-        <Button color='inherit' className={styleClasses.navOption}>Sign Up</Button>
+        <Button color='inherit' className={styleClasses.navOption}>Log In</Button>
+        <Button color='inherit' className={styleClasses.navOption}>Register</Button>
       </>;
 
     return navOptions;

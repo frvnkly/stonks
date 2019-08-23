@@ -82,15 +82,15 @@ export default () => {
     }
   }
 
-  const signinFormHandler = e => {
+  const loginFormHandler = e => {
     e.preventDefault();
     if (!submitEnabled) return;
 
     setLoading(true);
 
-    const signinEndpoint = '/auth/signin';
+    const loginEndpoint = '/auth/login';
     axios.post(
-      signinEndpoint,
+      loginEndpoint,
       {
         email: formState.email.value,
         password: formState.password.value
@@ -106,7 +106,7 @@ export default () => {
   };
 
   const enterKeySubmitHandler = e => {
-    if (e.key === 'Enter') signinFormHandler(e);
+    if (e.key === 'Enter') loginFormHandler(e);
   };
 
   const renderForm = () => {
@@ -139,7 +139,7 @@ export default () => {
         className={styleClasses.typography} 
         variant='h4'
       >
-        Sign In
+        Log In
       </Typography>
       <form>
         {renderForm()}
@@ -149,9 +149,9 @@ export default () => {
               variant='contained'
               fullWidth
               disabled={!submitEnabled || loading}
-              onClick={signinFormHandler}
+              onClick={loginFormHandler}
             >
-              {loading ? <CircularProgress size={24} /> : 'Sign In'}
+              {loading ? <CircularProgress size={24} /> : 'Log In'}
             </Button>
           </Grid>
         </Grid>

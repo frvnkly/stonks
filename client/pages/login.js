@@ -1,4 +1,4 @@
-import SignInForm from '../components/SignInForm';
+import LoginForm from '../components/LoginForm';
 
 import Navbar from '../components/Navbar';
 
@@ -6,7 +6,7 @@ export default () => {
   return (
     <div>
       <Navbar />
-      <SignInForm />
+      <LoginForm />
     </div>
   );
 };

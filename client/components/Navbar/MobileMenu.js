@@ -35,15 +35,15 @@ export default () => {
           </ListItem>
           <Divider />
           <ListItem button>
-            <ListItemText primary='Sign Out' />
+            <ListItemText primary='Log Out' />
           </ListItem>
         </>
       : <>
           <ListItem button>
-            <ListItemText primary='Sign In' />
+            <ListItemText primary='Log In' />
           </ListItem>
           <ListItem button>
-            <ListItemText primary='Sign Up' />
+            <ListItemText primary='Register' />
           </ListItem>
         </>;
     

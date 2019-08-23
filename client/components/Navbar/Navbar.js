@@ -10,13 +10,16 @@ const useStyles = makeStyles({
   brand: {
     flexGrow: 1,
   },
+  appBar: {
+    marginBottom: '50px',
+  },
 });
 
 export default () => {
   const styleClasses = useStyles();
 
   return (
-    <AppBar position='static'>
+    <AppBar position='static' className={styleClasses.appBar}>
       <Toolbar>
         <div className={styleClasses.brand}>
           <Brand />

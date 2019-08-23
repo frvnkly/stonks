@@ -131,15 +131,15 @@ export default () => {
     }
   }
 
-  const signupFormHandler = e => {
+  const registerFormHandler = e => {
     e.preventDefault();
     if (!submissionEnabled) return;
 
     setLoading(true);
     
-    const signupEndpoint = '/auth/register';
+    const registerEndpoint = '/auth/register';
     axios.post(
-      signupEndpoint,
+      registerEndpoint,
       {
         name: formState.name.value,
         email: formState.email.value,
@@ -155,7 +155,7 @@ export default () => {
   };
 
   const enterKeySubmitHandler = e => {
-    if (e.key === 'Enter') signupFormHandler(e);
+    if (e.key === 'Enter') registerFormHandler(e);
   };
 
   const renderForm = () => {
@@ -189,7 +189,7 @@ export default () => {
         className={styleClasses.typography}
         variant='h4'
       >
-        Sign Up
+        Register
       </Typography>
       <form>
         {renderForm()}
@@ -199,9 +199,9 @@ export default () => {
               variant='contained'
               fullWidth
               disabled={loading || !submissionEnabled}
-              onClick={signupFormHandler}
+              onClick={registerFormHandler}
             >
-              {loading ? <CircularProgress size={24} /> : 'Sign Up'}
+              {loading ? <CircularProgress size={24} /> : 'Register'}
             </Button>
           </Grid>
         </Grid>
