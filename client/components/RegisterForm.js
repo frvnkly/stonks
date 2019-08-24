@@ -11,7 +11,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles({
   typography: {
-    textAlign: 'center',
     paddingBottom: '20px',
   }
 });
@@ -190,6 +189,7 @@ export default () => {
       <Typography
         className={styleClasses.typography}
         variant='h4'
+        align='center'
       >
         Register
       </Typography>

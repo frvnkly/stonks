@@ -12,7 +12,6 @@ import UserContext from '../context/UserContext';
 
 const useStyles = makeStyles({
   typography: {
-    textAlign: 'center',
     paddingBottom: '20px',
   }
 });
@@ -140,8 +139,9 @@ export default () => {
   return (
     <Container maxWidth='lg'>
       <Typography
-        className={styleClasses.typography} 
+        className={styleClasses.typography}
         variant='h4'
+        align='center'
       >
         Log In
       </Typography>
