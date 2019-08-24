@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import axios from 'axios';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
@@ -24,6 +25,10 @@ export default () => {
 
   const styleClasses = useStyles();
 
+  const logoutHandler = () => {
+    axios.get('/auth/logout');
+  };
+
   const renderListItems = () => {
     const listItems = user
       ? <>
@@ -34,7 +39,7 @@ export default () => {
             <ListItemText primary='Purchase' />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem button onClick={logoutHandler}>
             <ListItemText primary='Log Out' />
           </ListItem>
         </>
