@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import Router from 'next/router';
 import axios from 'axios';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
@@ -32,11 +33,11 @@ export default () => {
   const renderListItems = () => {
     const listItems = user
       ? <>
-          <ListItem button>
+          <ListItem button onClick={() => { Router.push('/portfolio') }}>
             <ListItemText primary='Portfolio' />
           </ListItem>
-          <ListItem button>
-            <ListItemText primary='Purchase' />
+          <ListItem button onClick={() => { Router.push('/transactions') }}>
+            <ListItemText primary='Transactions' />
           </ListItem>
           <Divider />
           <ListItem button onClick={logoutHandler}>

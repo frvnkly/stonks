@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import Router from 'next/router';
 import Hidden from '@material-ui/core/Hidden';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,8 +22,20 @@ export default () => {
   const renderNavOptions = () => {
     const navOptions = user
     ? <>
-        <Button color='inherit' className={styleClasses.navOption}>Portfolio</Button>
-        <Button color='inherit' className={styleClasses.navOption}>Purchase</Button>
+        <Button
+          color='inherit'
+          className={styleClasses.navOption}
+          onClick={() => { Router.push('/portfolio') }}
+        >
+          Portfolio
+        </Button>
+        <Button
+          color='inherit'
+          className={styleClasses.navOption}
+          onClick={() => { Router.push('/transactions') }}
+        >
+          Transactions
+        </Button>
         <IconButton color='inherit' className={styleClasses.navOption}>
           <AccountCircle />
         </IconButton>
