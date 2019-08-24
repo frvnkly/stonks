@@ -23,15 +23,15 @@ class MyApp extends App {
     this.updateUser();
   }
 
-  updateUser() {
+  updateUser = async () => {
     const currentUserEndpoint = '/auth/current_user';
-    axios.get(currentUserEndpoint)
-      .then(res => {
-        this.setState({ user: res.data });
-      })
-      .catch(res => {
-        this.setState({ user: false });
-      });
+    try {
+      const res = await axios.get(currentUserEndpoint);
+      const updatedUser = res.data;
+      this.setState({ user: updatedUser });
+    } catch (err) {
+      this.setState({ user: false });
+    }
   }
 
   render() {
