@@ -10,8 +10,8 @@ export default () => {
   useEffect(
     () => {
       // redirect based on auth state
-      // null: initial state, false: no user
-      if (user === false) { Router.replace('/login'); }
+      // null: initial state, empty string: no user
+      if (user === '') { Router.replace('/login'); }
       else if (user) { Router.replace('/portfolio'); }
     },
   );

@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import Router from 'next/router';
-import axios from 'axios';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
@@ -19,20 +18,19 @@ const useStyles = makeStyles({
   },
 });
 
-export default () => {
+export default ({ logout }) => {
   const { user } = useContext(UserContext);
-
   const [ drawerOpen, setDrawerOpen ] = useState(false);
 
   const styleClasses = useStyles();
 
-  const logoutHandler = () => {
-    axios.get('/auth/logout');
-  };
-
   const renderListItems = () => {
     const listItems = user
       ? <>
+          <ListItem alignItems='center'>
+            <ListItemText primary={user.name} secondary={user.email} />
+          </ListItem>
+          <Divider />
           <ListItem button onClick={() => { Router.push('/portfolio') }}>
             <ListItemText primary='Portfolio' />
           </ListItem>
@@ -40,15 +38,15 @@ export default () => {
             <ListItemText primary='Transactions' />
           </ListItem>
           <Divider />
-          <ListItem button onClick={logoutHandler}>
+          <ListItem button onClick={logout}>
             <ListItemText primary='Log Out' />
           </ListItem>
         </>
       : <>
-          <ListItem button>
+          <ListItem button onClick={() => { Router.push('/login') }}>
             <ListItemText primary='Log In' />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={() => { Router.push('/register') }}>
             <ListItemText primary='Register' />
           </ListItem>
         </>;
