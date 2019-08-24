@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const { Schema } = require('mongoose');
 
 const STARTING_BALANCE = 5000;
 
