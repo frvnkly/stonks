@@ -1,4 +1,5 @@
 import { useReducer, useState } from 'react';
+import Router from 'next/router';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
@@ -147,6 +148,7 @@ export default () => {
       }
     ).then(res => {
       setLoading(false);
+      Router.push('/login');
     }).catch(err => {
       if (err.response.status === 409) { dispatch({ type: 'emailInUse' }) };
       if (err.response.status === 400) { alert('Invalid submission.') }
