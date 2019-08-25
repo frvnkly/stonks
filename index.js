@@ -19,8 +19,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// authentication routes
-require('./routes/auth')(app);
+require('./routes/auth')(app);  // authentication routes
+require('./routes/stocks')(app);  // stock portfolio routes
 
 const start = async port => {
   await next(app);
