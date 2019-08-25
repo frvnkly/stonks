@@ -69,7 +69,7 @@ module.exports = app => {
     `${routePrefix}/login`,
     passport.authenticate('local'),
     (req, res) => {
-      res.redirect('/');
+      res.end();
     }
   );
 
@@ -77,7 +77,7 @@ module.exports = app => {
     `${routePrefix}/logout`,
     (req, res) => {
       req.logout();
-      res.redirect('/login');
+      res.end();
     }
   );
 
