@@ -116,7 +116,7 @@ module.exports = app => {
       try {
         stocks = await Stock.find(
           { user: user.id },
-          null,
+          ['symbol', 'shares'],
           { sort: { symbol: 1 } },
         ).lean();
       } catch (err) {
@@ -139,8 +139,8 @@ module.exports = app => {
           );
           if (apiRes.data['Global Quote']) {
             const priceData = apiRes.data['Global Quote'];
-            stock.price = priceData['05. price'];
-            stock.open = priceData['02. open'];
+            stock.price = Number(priceData['05. price']);
+            stock.open = Number(priceData['02. open']);
             stock.latestTradeDay = priceData['07. latest trading day'];
           }
         } catch (err) {
@@ -150,7 +150,7 @@ module.exports = app => {
 
       // calculate portfolio value
       const portfolioValue = stocks.reduce((acc, curr) => {
-        return acc + Number(curr.price);
+        return acc + (curr.price * curr.shares);
       }, 0);
 
       res.send({
