@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import Router from 'next/router';
+import axios from 'axios';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -8,7 +9,6 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Divider from '@material-ui/core/Divider';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 
 import UserContext from '../context/UserContext';
@@ -29,6 +29,14 @@ export default () => {
   useEffect(() => {
     // redirect if user not logged in
     if (user === '') { Router.replace('/') }
+
+    // retrieve user portfolio
+    if (user) {
+      const portfolioEndpoint = '/api/stocks/portfolio';
+      axios.get(portfolioEndpoint)
+      .then(res => { console.log(res.data) })
+      .catch(err => { console.log(err) });
+    }
   });
 
   return (
@@ -44,7 +52,7 @@ export default () => {
               <Card>
                 <CardHeader
                   title='Balance'
-                  subheader={`$${user.balance}`}
+                  subheader={`$${user.balance.toFixed(2)}`}
                   action={<BuyModal />}
                 />
               </Card>
