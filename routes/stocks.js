@@ -19,12 +19,13 @@ module.exports = app => {
     `${routePrefix}/buy`,
     requireLogin,
     async (req, res) => {
-      const { shares, } = req.body;
+      const shares = Number(req.body.shares);
       const symbol = req.body.symbol.toUpperCase();
       const user = req.user;
 
       // check if shares value is an integer
       if (!Number.isInteger(shares)) {
+        console.log('shares');
         res
           .status(400)
           .send({ error: 'Number of shares should be an integer.'})

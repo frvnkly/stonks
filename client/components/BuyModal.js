@@ -5,6 +5,10 @@ import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles({
@@ -21,10 +25,12 @@ const useStyles = makeStyles({
 
 export default () => {
   const [ open, setOpen ] = useState(false);
+  const [ loading, setLoading ] = useState(false);
   const [ form, setForm ] = useState({
     symbol: '',
     shares: '',
   });
+  const [ feedback, setFeedback ] = useState(null);
 
   const styleClasses = useStyles();
 
@@ -34,6 +40,7 @@ export default () => {
   };
 
   const submitHandler = () => {
+    setLoading(true);
     const buyEndpoint = '/api/stocks/buy';
     axios.put(
       buyEndpoint,
@@ -41,7 +48,9 @@ export default () => {
         symbol: form.symbol.toUpperCase(),
         shares: form.shares
       }
-    ).then(res => { console.log(user); });
+    ).then(res => { setFeedback('Purchase successful.') })
+    .catch(err => { setFeedback('Error: purchase failed.') })
+    .finally(() => { setLoading(false) });
   };
 
   let submissionEnabled = true;
@@ -54,7 +63,8 @@ export default () => {
 
   return (
     <div>
-      <Button onClick={() => setOpen(true)}>Buy</Button>
+      <Button variant='contained' onClick={() => setOpen(true)}>Buy</Button>
+
       <Modal
         open={open}
         onClose={closeHandler}
@@ -74,6 +84,7 @@ export default () => {
                 fullWidth
               />
             </Grid>
+
             <Grid item>
               <TextField
                 type='number'
@@ -88,16 +99,18 @@ export default () => {
                 fullWidth
               />
             </Grid>
+
             <Grid item>
               <Button
                 variant='contained'
-                disabled={!submissionEnabled}
+                disabled={!submissionEnabled || loading}
                 fullWidth
                 onClick={submitHandler}
               >
-                Buy
+                {loading ? <CircularProgress size={24} /> : 'Buy'}
               </Button>
             </Grid>
+
             <Grid item>
               <Button
                 variant='contained'
@@ -110,6 +123,17 @@ export default () => {
           </Grid>
         </Paper>
       </Modal>
+
+      <Snackbar
+        open={Boolean(feedback)}
+        onClose={() => setFeedback(null)}
+        message={feedback}
+        action={
+          <IconButton color='inherit' onClick={() => setFeedback(null)}>
+            <CloseIcon />
+          </IconButton>
+        }
+      />
     </div>
   );
 };
