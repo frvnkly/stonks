@@ -19,7 +19,18 @@ module.exports = app => {
     `${routePrefix}/buy`,
     requireLogin,
     async (req, res) => {
-      const { symbol, shares, } = req.body;
+      const { shares, } = req.body;
+      const symbol = req.body.symbol.toUpperCase();
+      const user = req.user;
+
+      // check if shares value is an integer
+      if (!Number.isInteger(shares)) {
+        res
+          .status(400)
+          .send({ error: 'Number of shares should be an integer.'})
+          .end();
+        return;
+      }
 
       // get stock data from api
       let apiRes;
@@ -36,6 +47,12 @@ module.exports = app => {
         );
       } catch (err) {
         res.status(503).send().end();
+        return;
+      }
+
+      // check if ticker symbol is valid
+      if (apiRes['Error Message']) {
+        res.status(400).send({ error: 'Not a valid ticker symbol.' }).end();
         return;
       }
 
@@ -81,9 +98,6 @@ module.exports = app => {
       await stockRecord.save();
       await userRecord.save();
       await transactionRecord.save();
-
-      // update user profile attached to session
-      req.login(userRecord);
 
       res.end();
     }

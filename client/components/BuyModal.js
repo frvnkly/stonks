@@ -38,10 +38,10 @@ export default () => {
     axios.put(
       buyEndpoint,
       {
-        symbol: form.symbol,
+        symbol: form.symbol.toUpperCase(),
         shares: form.shares
       }
-    );
+    ).then(res => { console.log(user); });
   };
 
   let submissionEnabled = true;
