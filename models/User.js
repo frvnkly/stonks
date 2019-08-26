@@ -1,6 +1,6 @@
 const { Schema } = require('mongoose');
 
-const STARTING_BALANCE = 5000;
+const STARTING_BALANCE = 5000.00;
 
 const User = new Schema({
   name: String,

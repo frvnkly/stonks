@@ -62,7 +62,9 @@ module.exports = app => {
 
       // update user balance
       const userRecord = await User.findById(user.id);
-      userRecord.balance -= currentPrice * shares;
+      userRecord.balance = (
+        userRecord.balance - (currentPrice * shares)
+      ).toFixed(2);
 
       // save updates to database
       await userRecord.save();
