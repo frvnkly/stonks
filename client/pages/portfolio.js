@@ -38,9 +38,7 @@ export default () => {
     if (user) {
       const portfolioEndpoint = '/api/stocks/portfolio';
       axios.get(portfolioEndpoint)
-      .then(res => {
-        console.log(res.data); 
-        setPortfolio(res.data); })
+      .then(res => { setPortfolio(res.data); })
       .catch(err => {});
     }
   }, [ user ]);
