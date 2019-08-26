@@ -4,8 +4,10 @@ const mongoose = require('mongoose');
 const requireLogin = require('../middleware/requireLogin');
 const userSchema = require('../models/User');
 const stockSchema = require('../models/Stock');
+const transactionSchema = require('../models/Transaction');
 const User = mongoose.model('User', userSchema);
 const Stock = mongoose.model('Stock', stockSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
 const config = require('../config');
 const routePrefix = '/api/stocks';
@@ -60,6 +62,15 @@ module.exports = app => {
         });
       }
 
+      // create new transaction record
+      const transactionRecord = new Transaction({
+        type: 'buy',
+        symbol,
+        shares,
+        total: (currentPrice * shares).toFixed(2),
+        user: user.id,
+      });
+
       // update user balance
       const userRecord = await User.findById(user.id);
       userRecord.balance = (
@@ -67,8 +78,9 @@ module.exports = app => {
       ).toFixed(2);
 
       // save updates to database
-      await userRecord.save();
       await stockRecord.save();
+      await userRecord.save();
+      await transactionRecord.save();
 
       // update user profile attached to session
       req.login(userRecord);
