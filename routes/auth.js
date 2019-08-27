@@ -84,7 +84,15 @@ module.exports = app => {
   app.get(
     `${routePrefix}/current_user`,
     (req, res) => {
-      res.send(req.user);
+      let response = '';
+      if (req.user) {
+        response = {
+          name: req.user.name,
+          email: req.user.email,
+          balance: req.user.balance,
+        };
+      }
+      res.send(response);
     }
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
@@ -10,6 +10,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/styles';
+
+import UserContext from '../context/UserContext';
 
 const useStyles = makeStyles({
   paper: {
@@ -24,6 +26,7 @@ const useStyles = makeStyles({
 })
 
 export default () => {
+  const { updateUser } = useContext(UserContext);
   const [ open, setOpen ] = useState(false);
   const [ loading, setLoading ] = useState(false);
   const [ form, setForm ] = useState({
@@ -31,12 +34,16 @@ export default () => {
     shares: '',
   });
   const [ feedback, setFeedback ] = useState(null);
+  const [ transactionMade, setTransactionMade ] = useState(false);
 
   const styleClasses = useStyles();
 
   const closeHandler = () => {
     setForm({ symbol: '', shares: '' });
     setOpen(false);
+
+    // reload user data if transaction was made
+    if (transactionMade) updateUser();
   };
 
   const submitHandler = () => {
@@ -48,8 +55,10 @@ export default () => {
         symbol: form.symbol.toUpperCase(),
         shares: form.shares
       }
-    ).then(res => { setFeedback('Purchase successful.') })
-    .catch(err => { setFeedback('Error: purchase failed.') })
+    ).then(res => {
+      setFeedback('Purchase successful.');
+      setTransactionMade(true);
+    }).catch(err => { setFeedback('Error: purchase failed.') })
     .finally(() => { setLoading(false) });
   };
 
