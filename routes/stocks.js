@@ -162,4 +162,28 @@ module.exports = app => {
       return;
     }
   );
+  
+  // get transaction history route
+  app.get(
+    `${routePrefix}/transactions`,
+    requireLogin,
+    async (req, res) => {
+      const user = req.user;
+
+      // retrieve transactions from db sorted by timestamp in desc. order
+      let transactions;
+      try {
+        transactions = await Transaction.find(
+          { user: user.id },
+          null,
+          { sort: { timestamp: -1 } },
+        );
+      } catch (err) {
+        res.status(503).send().end();
+        return;
+      }
+
+      res.send({ transactions });
+    }
+  );
 };
