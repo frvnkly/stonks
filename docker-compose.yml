@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  app:
+    image: stonks
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    env_file: .env
+    command: npm run start
+    networks:
+      - appnetwork
+
+  mongodb:
+    image: mongo
+    restart: always
+    container_name: mongodb
+    ports:
+      - "27017:27107"
+    command: mongod -noauth --smallfiles
+    networks:
+      - appnetwork
+
+networks:
+  appnetwork:
+    driver: bridge
