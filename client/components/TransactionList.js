@@ -35,7 +35,7 @@ export default ({ transactions }) => {
       const ts = new Date(t.timestamp);
       const date = `${ts.getMonth() + 1}/${ts.getDate()}/${ts.getFullYear()}`;
       const hour = ts.getHours() % 12 === 0 ? 12 : ts.getHours() % 12;
-      const minute = ts.getMinutes();
+      const minute = String(ts.getMinutes()).padStart(2, '0');
       const amPm = ts.getHours() < 12 ? 'AM' : 'PM';
 
       const plusMinus = t.type === 'buy' ? '-' : '+';

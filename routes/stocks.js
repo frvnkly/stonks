@@ -52,7 +52,7 @@ module.exports = app => {
       }
 
       // check if ticker symbol is valid
-      if (apiRes.data['Error Message']) {
+      if (!apiRes.data['Global Quote']) {
         res.status(400).send({ error: 'Not a valid ticker symbol.' }).end();
         return;
       }
@@ -114,7 +114,7 @@ module.exports = app => {
       const user = req.user;
 
       // check if user has enough shares to sell
-      const stockRecord = Stock.findOne({ user: user.id, symbol });
+      const stockRecord = await Stock.findOne({ user: user.id, symbol });
       if (!stockRecord || stockRecord.shares < shares) {
         res.status(403).send().end();
         return;
@@ -139,12 +139,12 @@ module.exports = app => {
       }
 
       // invalid ticker symbol
-      if (apiRes.data[`Error Message`]) {
+      if (!apiRes.data['Global Quote']) {
         res.status(400).send({ error: 'Not a valid ticker symbol.' }).end();
         return;
       }
 
-      const price = apiRes.data['Global Quote']['05. Price'];
+      const price = apiRes.data['Global Quote']['05. price'];
 
       // create transaction record
       const transactionRecord = new Transaction({
@@ -156,7 +156,7 @@ module.exports = app => {
       });
 
       // update user record
-      const userRecord = await User.findOne({ id: user.id });
+      const userRecord = await User.findById(user.id);
       userRecord.balance = (userRecord.balance + (shares * price)).toFixed(2);
 
       // delete or update stock record

@@ -1,9 +1,12 @@
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Button from '@material-ui/core/Button';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
+
+import SellModal from '../components/SellModal';
 
 const useStyles = makeStyles({
   summaryHeader: {
@@ -53,13 +56,15 @@ export default ({ stocks }) => {
               <b>{s.symbol}</b>{` (${s.shares} shares)`}
             </div>
             <div className={valueStyle}>{`${value}`}</div>
-            <Button>Sell</Button>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={styleClasses.details}>
             <div><b>Share price -</b>{` ${price}`}</div>
             <div><b>Opening price -</b>{` ${open}`}</div>
             <div><b>Latest trade day -</b>{` ${latestTradeDay}`}</div>
           </ExpansionPanelDetails>
+          <ExpansionPanelActions>
+            <SellModal symbol={s.symbol} />
+          </ExpansionPanelActions>
         </ExpansionPanel>
       );
     });
