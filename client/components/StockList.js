@@ -1,6 +1,7 @@
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/styles';
 
@@ -52,6 +53,7 @@ export default ({ stocks }) => {
               <b>{s.symbol}</b>{` (${s.shares} shares)`}
             </div>
             <div className={valueStyle}>{`${value}`}</div>
+            <Button>Sell</Button>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={styleClasses.details}>
             <div><b>Share price -</b>{` ${price}`}</div>

@@ -52,7 +52,7 @@ module.exports = app => {
       }
 
       // check if ticker symbol is valid
-      if (apiRes['Error Message']) {
+      if (apiRes.data['Error Message']) {
         res.status(400).send({ error: 'Not a valid ticker symbol.' }).end();
         return;
       }
@@ -99,6 +99,77 @@ module.exports = app => {
       await stockRecord.save();
       await userRecord.save();
       await transactionRecord.save();
+
+      res.end();
+    }
+  );
+
+  // sell stocks route
+  app.put(
+    `${routePrefix}/sell`,
+    requireLogin,
+    async (req, res) => {
+      const shares = Number(req.body.shares);
+      const symbol = req.body.symbol;
+      const user = req.user;
+
+      // check if user has enough shares to sell
+      const stockRecord = Stock.findOne({ user: user.id, symbol });
+      if (!stockRecord || stockRecord.shares < shares) {
+        res.status(403).send().end();
+        return;
+      }
+
+      // look up stock price
+      let apiRes;
+      try {
+        apiRes = await axios.get(
+          apiEndpoint,
+          {
+            params: {
+              function: 'GLOBAL_QUOTE',
+              symbol,
+              apikey: config.alphaVantageApiKey,
+            }
+          }
+        );
+      } catch (err) {
+        res.status(503).send().end();
+        return;
+      }
+
+      // invalid ticker symbol
+      if (apiRes.data[`Error Message`]) {
+        res.status(400).send({ error: 'Not a valid ticker symbol.' }).end();
+        return;
+      }
+
+      const price = apiRes.data['Global Quote']['05. Price'];
+
+      // create transaction record
+      const transactionRecord = new Transaction({
+        type: 'sell',
+        symbol,
+        shares,
+        total: (shares * price).toFixed(2),
+        user: user.id
+      });
+
+      // update user record
+      const userRecord = await User.findOne({ id: user.id });
+      userRecord.balance = (userRecord.balance + (shares * price)).toFixed(2);
+
+      // delete or update stock record
+      if (stockRecord.shares <= shares) {
+        await Stock.deleteOne(stockRecord);
+      } else {
+        stockRecord.shares -= shares;
+        await stockRecord.save();
+      }
+
+      // save changes to database
+      await transactionRecord.save();
+      await userRecord.save();
 
       res.end();
     }
