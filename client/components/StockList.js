@@ -49,14 +49,14 @@ export default ({ stocks }) => {
         <ExpansionPanel key={s.symbol}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <div className={styleClasses.summaryHeader}>
-              {`${s.symbol} (${s.shares} shares)`}
+              <b>{s.symbol}</b>{` (${s.shares} shares)`}
             </div>
             <div className={valueStyle}>{`${value}`}</div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={styleClasses.details}>
-            <div>{`Share price: ${price}`}</div>
-            <div>{`Opening price: ${open}`}</div>
-            <div>{`Latest trade day: ${latestTradeDay}`}</div>
+            <div><b>Share price -</b>{` ${price}`}</div>
+            <div><b>Opening price -</b>{` ${open}`}</div>
+            <div><b>Latest trade day -</b>{` ${latestTradeDay}`}</div>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       );
