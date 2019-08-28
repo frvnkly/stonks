@@ -27,11 +27,12 @@ export default ({ stocks }) => {
 
   const renderStockList = stocks => {
     return stocks.map(s => {
-      let price, open, value, valueStyle;
+      let price, open, value, latestTradeDay, valueStyle;
       if (s.price) {
         price = `$${s.price.toFixed(2)}`;
         open = `$${s.open.toFixed(2)}`
         value = `$${(s.price * s.shares).toFixed(2)}`
+        latestTradeDay = s.latestTradeDay;
 
         if (s.price > s.open) valueStyle = styleClasses.positiveText
         else if (s.price < s.open) valueStyle = styleClasses.negativeText
@@ -40,6 +41,7 @@ export default ({ stocks }) => {
         price = 'N/A';
         open = 'N/A';
         value = 'N/A';
+        latestTradeDay = 'N/A';
         valueStyle = styleClasses.neutralText;
       }
 
@@ -54,6 +56,7 @@ export default ({ stocks }) => {
           <ExpansionPanelDetails className={styleClasses.details}>
             <div>{`Share price: ${price}`}</div>
             <div>{`Opening price: ${open}`}</div>
+            <div>{`Latest trade day: ${latestTradeDay}`}</div>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       );

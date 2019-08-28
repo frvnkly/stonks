@@ -34,7 +34,7 @@ export default ({ transactions }) => {
       // decompose timestamp
       const ts = new Date(t.timestamp);
       const date = `${ts.getMonth() + 1}/${ts.getDate()}/${ts.getFullYear()}`;
-      const hour = ts.getHours() === 0 ? 12 : ts.getHours() % 12;
+      const hour = ts.getHours() % 12 === 0 ? 12 : ts.getHours() % 12;
       const minute = ts.getMinutes();
       const amPm = ts.getHours() < 12 ? 'AM' : 'PM';
 
