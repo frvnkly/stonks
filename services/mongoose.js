@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const mongoUri = 'mongodb://mongodb:27017/stonks';
+const { mongodbUri } = require('../config');
 
 require('../models/User');
 require('../models/Stock');
 require('../models/Transaction');
 
 mongoose.connect(
-  mongoUri,
+  mongodbUri,
   { useNewUrlParser: true }
 ).then(() => {
   console.log('connected to mongodb');
