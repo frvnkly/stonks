@@ -24,7 +24,7 @@ module.exports = app => {
       const user = req.user;
 
       // check if shares value is an integer
-      if (!Number.isInteger(shares)) {
+      if (!Number.isInteger(shares) || shares <= 0) {
         console.log('shares');
         res
           .status(400)
